@@ -3,6 +3,7 @@ import paho.mqtt.client as paho
 import json
 import time
 
+
 def on_publish(client, userdata, result):
     print('Published Data {} result {}'.format(userdata, result))
     pass

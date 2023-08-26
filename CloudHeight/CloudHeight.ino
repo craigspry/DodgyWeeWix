@@ -5,20 +5,8 @@
   Date: November 16th, 2013
   License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
 
-  Much of this is based on Mike Grusin's USB Weather Board code: https://www.sparkfun.com/products/10586
-
-  This is a more advanced example of how to utilize every aspect of the weather shield. See the basic
-  example if you're just getting started.
-
-  This code reads all the various sensors (wind speed, direction, rain gauge, humidty, pressure, light, batt_lvl)
-  and reports it over the serial comm port. This can be easily routed to an datalogger (such as OpenLog) or
-  a wireless transmitter (such as Electric Imp).
-
-  Measurements are reported once a second but windspeed and rain gauge are tied to interrupts that are
-  calcualted at each report.
-
-  This example code assumes the GPS module is not used.
-
+  This is extended from the SparkFun sample by Nathan Seidle. All the smarts are in WeeWX, the only complex calculation done by
+  this code is cloud height. Weather data is transmitted once a minute.
 */
 
 #include <Wire.h> //I2C needed for sensors
@@ -120,10 +108,6 @@ void wspeedIRQ()
   }
 }
 
-
-
-
-
 void setup()
 {
   Serial.begin(9600);
@@ -148,17 +132,12 @@ void setup()
   myHumidity.begin();
 
   attachInterrupt(digitalPinToInterrupt(RAIN), rainIRQ, FALLING);
-  //Serial.println(digitalPinToInterrupt(RAIN));
-  //Serial.println(digitalPinToInterrupt(WSPEED));
   attachInterrupt(digitalPinToInterrupt(WSPEED), wspeedIRQ, FALLING);//May Need to swap IRQ for uno
 
   seconds = 0;
   lastSecond = millis();
   lastWeatherCheck = millis();
   rainfall = 0.0f;
-
-  //Serial.println("Weather Shield online!");
-  //Serial.println("humidity,temperature,pressure,light,dewp,cloudheight,winddir,windspeed");
 
 }
 
@@ -218,13 +197,9 @@ void calcWeather()
 float get_light_level()
 {
   float operatingVoltage = analogRead(REFERENCE_3V3);
-
   float lightSensor = analogRead(LIGHT);
-
   operatingVoltage = 3.3 / operatingVoltage; //The reference voltage is 3.3V
-
   lightSensor = operatingVoltage * lightSensor;
-
   return (lightSensor);
 }
 
@@ -235,15 +210,10 @@ float get_light_level()
 float get_battery_level()
 {
   float operatingVoltage = analogRead(REFERENCE_3V3);
-
   float rawVoltage = analogRead(BATT);
-
   operatingVoltage = 3.30 / operatingVoltage; //The reference voltage is 3.3V
-
   rawVoltage = operatingVoltage * rawVoltage; //Convert the 0 to 1023 int to actual voltage on BATT pin
-
   rawVoltage *= 4.90; //(3.9k+1k)/1k - multiple BATT voltage by the voltage divider to get actual system voltage
-
   return (rawVoltage);
 }
 

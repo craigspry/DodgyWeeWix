@@ -7,5 +7,5 @@
 Package of user extensions to weewx.
 
 This package is for your use. Generally, extensions to weewx go here.
-Any modules you add to it will not be touched by the upgrade process.  
+Any modules you add to it will not be touched by the upgrade process.
 """
