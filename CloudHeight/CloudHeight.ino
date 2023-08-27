@@ -1,10 +1,4 @@
 /*
-  Weather Shield Example
-  By: Nathan Seidle
-  SparkFun Electronics
-  Date: November 16th, 2013
-  License: This code is public domain but you buy me a beer if you use this and we meet someday (Beerware license).
-
   This is extended from the SparkFun sample by Nathan Seidle. All the smarts are in WeeWX, the only complex calculation done by
   this code is cloud height. Weather data is transmitted once a minute.
 */
